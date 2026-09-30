@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: macos
+      POSTGRES_PASSWORD: macos
+      POSTGRES_DB: practice_fastapi
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://macos:macos@db:5432/practice_fastapi
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
